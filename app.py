@@ -3,6 +3,7 @@ import os
 import subprocess
 import json
 import sys
+import re
 
 def my_server():
 
@@ -21,14 +22,14 @@ def my_server():
     while True:
         index=index + 1
         out = process.stdout.readline()
-        if out == '' and process.poll() != None:
-            break
         if out != '':
-            
-            sys.stdout.write(out)
-            sys.stdout.flush()
-            if out =="}":
-                break
+            start = out.find("{")
+            end = out.find("}")
+            substring = out[start:end+1]
+            sys.stdout.write(substring)
+            sys.stdout.flush() 
+            break
+
         
     
 
@@ -64,7 +65,7 @@ if __name__ == "__main__":
     data={"MY_IP":"192.168.1.3",
           "NAME":"USER",
           "TYPE":"DISCOVER",
-          "PAYLOAD":""}
+          "PAYLOAD":"sad"}
     msg=json.dumps(data)
     client = threading.Thread(target=client,args=(msg,str(t[0])))
     client.start()

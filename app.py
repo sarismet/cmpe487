@@ -5,37 +5,30 @@ import json
 import sys
 import re
 
+port = 12345
 def my_server():
 
-
-
-
-    process = subprocess.Popen(
-    'nc -l -p 12345',
-    stdout=subprocess.PIPE,
-    stderr=subprocess.STDOUT,
-    shell=True,
-    encoding='utf-8',
-    errors='replace'
-    )
-    index=0
-    while True:
-        index=index + 1
+    while(True):
+        cmd = 'nc -l -p {}'.format(port)
+        process = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        shell=True,
+        encoding='utf-8',
+        errors='replace'
+        )
         out = process.stdout.readline()
-        if out != '':
-            start = out.find("{")
-            end = out.find("}")
-            substring = out[start:end+1]
-            sys.stdout.write(substring)
-            sys.stdout.flush() 
-            break
+        print(out)
 
-        
     
 
 def client(message,to):
-    command = 'echo {} | nc {} 12345 -c'.format(message,to)
-    subprocess.call(command, shell=True)
+    try:
+        command = 'echo {} | nc {} {} -c'.format(message,to,port)
+        subprocess.call(command, shell=True)
+    except:
+        pass
 
 
 def create_ip_list(local_ip,lan):
@@ -57,16 +50,35 @@ def get_local_ips():
     lan=str(parse[0])+"."+str(parse[1])+"."+str(parse[2])
     return (local_ip,lan)
 
+def send_discovery(my_ip):
+
+
+    data={"MY_IP":"",
+        "NAME":"USER",
+        "TYPE":"DISCOVER",
+        "PAYLOAD":""}
+    data["MY_IP"]=my_ip
+    
+    outfile = open("ips.json", "r") 
+    json_dict = json.load(outfile)
+    for key in json_dict:
+        msg = "\'"+json.dumps(data)+"\'"
+        try:
+            
+            cmd = 'echo {} | nc {} {}'.format(msg,key,port)
+            subprocess.Popen(cmd, shell=True)
+        except:
+            pass
+
+    sys.stdout.flush()
+            
+
+
 if __name__ == "__main__":
     t=get_local_ips()
     create_ip_list(local_ip=t[0],lan=t[1])
+    send_discovery(t[0])
     server = threading.Thread(target=my_server)
     server.start()
-    data={"MY_IP":"192.168.1.3",
-          "NAME":"USER",
-          "TYPE":"DISCOVER",
-          "PAYLOAD":"sad"}
-    msg=json.dumps(data)
-    client = threading.Thread(target=client,args=(msg,str(t[0])))
-    client.start()
+  
     

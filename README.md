@@ -7,8 +7,10 @@
 # Files Structures
 
   - There is only one directory and you can find all the files.
+  - There is a file named as requirements.txt and you can find all the dependencies.
 
 # Important:
+  - I have tried this app with my friend Alkım Ece Toprak, Özgürcan Öztaş and Muhammed Tayyip Yazıcı.
   - There is a log file named as log.txt and it is in charge of keeping all the logs of history of communication.
   - The other file response_json.json that includes a response_array which is an array that keeps the username and ips of users
   

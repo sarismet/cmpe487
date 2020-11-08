@@ -11,6 +11,8 @@
 # Important:
   - There is a log file named as log.txt and it is in charge of keeping all the logs of history of communication.
   - The other file response_json.json that includes a response_array which is an array that keeps the username and ips of users
+  ![alt text](https://github.com/sarismet/cmpe487/blob/main/responsearray.png)
+  
 
 
 ### Run the program:

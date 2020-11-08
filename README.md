@@ -13,13 +13,12 @@
   - The other file response_json.json that includes a response_array which is an array that keeps the username and ips of users
 
 
-### To run on LogMeIn Hamachi:
-- .
+### Run the program:
+- To run on LogMeIn Hamachi
 ```sh
 $ python3 app.py h
 ```
-### To run on localhost:
-- .
+- - To run on Localhost
 ```sh
 $ python3 app.py l
 ```

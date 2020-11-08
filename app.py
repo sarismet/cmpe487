@@ -6,26 +6,48 @@ import sys
 import re
 
 port = 12345
-def my_server():
+def my_server(local_ip):
 
     while(True):
-        cmd = 'nc -l -p {}'.format(port)
-        process = subprocess.Popen(
-        cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        shell=True,
-        encoding='utf-8',
-        errors='replace'
-        )
-        out = process.stdout.readline()
-        print(out)
-
+        try:
+            cmd = 'nc -l -p {}'.format(port)
+            process = subprocess.Popen(
+            cmd,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            shell=True,
+            encoding='utf-8',
+            errors='replace'
+            )
+            out = process.stdout.readline()
+        
+            start=out.find('{')
+            end=out.find('}')+1
+            msg=out[start:end]
+            rejson = json.loads(msg)
+            if rejson["TYPE"] == "DISCOVER":
+                response_msg = {
+                    "MY_IP":"",
+                    "NAME":"",
+                    "TYPE":"RESPONSE",
+                    "PAYLOAD":""
+                }
+                lan_turn=local_ip.split(".")[3]
+                username= "USER"+str(lan_turn)
+                response_msg["MY_IP"]=local_ip
+                response_msg["NAME"] = username
+                
+                client(json.dumps(response_msg),rejson["MY_IP"])
+            print(rejson,flush=True)
+            sys.stdout.flush()
+        except Exception as e:
+            print("There is an error \n",e,flush=True)
     
 
 def client(message,to):
     try:
         command = 'echo {} | nc {} {} -c'.format(message,to,port)
+        print("sending the message with the command ",command,flush=True)
         subprocess.call(command, shell=True)
     except:
         pass
@@ -78,7 +100,7 @@ if __name__ == "__main__":
     t=get_local_ips()
     create_ip_list(local_ip=t[0],lan=t[1])
     send_discovery(t[0])
-    server = threading.Thread(target=my_server)
+    server = threading.Thread(target=my_server,args=(t[0],))
     server.start()
   
     

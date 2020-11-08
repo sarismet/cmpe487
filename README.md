@@ -16,10 +16,16 @@
   
   - The app first start server and beings listening then send the DISCOVER message to ips in its lan such that if our ip is 25.43.1.132 then it sends 25.43.1.0. to 25.43.1.255.
   - After that the app ask you what you want to do. You can send message if you know the ip before or you need to send a spesific DISCOVER message to get response and know the ip to send a message.
+  ![alt text](https://github.com/sarismet/cmpe487/blob/main/what.png)
+  
   - To send a message press m then app list the known users and ask you to give the order of the user that you want to send the message
-  ![alt text](https://github.com/sarismet/cmpe487/blob/main/responsearray.png)
+  
+  ![alt text](https://github.com/sarismet/cmpe487/blob/main/message1.png)
+  
+  ![alt text](https://github.com/sarismet/cmpe487/blob/main/message2.png)
+  
   - To send a DISCOVER message press d then enter the ip
-  ![alt text](https://github.com/sarismet/cmpe487/blob/main/responsearray.png)
+  ![alt text](https://github.com/sarismet/cmpe487/blob/main/discover.png)
   
 
 
